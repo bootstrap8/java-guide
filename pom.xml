@@ -14,6 +14,8 @@
         <module>base-guide</module>
         <module>pattern-guide</module>
         <module>common-module</module>
+        <module>h2-guide</module>
+        <module>webservice-guide</module>
     </modules>
 
     <dependencies>
@@ -37,11 +39,21 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
     </dependencies>
 
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.11</version>
+                <scope>test</scope>
+            </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
