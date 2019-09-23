@@ -16,6 +16,9 @@
         <module>common-module</module>
         <module>h2-guide</module>
         <module>webservice-guide</module>
+        <module>kafka-guide</module>
+        <module>zookeeper-guide</module>
+        <module>http-guide</module>
     </modules>
 
     <dependencies>

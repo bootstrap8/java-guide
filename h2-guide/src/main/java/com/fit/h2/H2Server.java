@@ -45,7 +45,7 @@ public class H2Server {
         try {
             Class.forName("org.h2.Driver");
             // connect to h2
-            Connection conn = DriverManager.getConnection("jdbc:h2:./h2db/resource", "sa", "sa");
+            Connection conn = DriverManager.getConnection("jdbc:h2:./h2-guide/h2db/resource", "sa", "sa");
             Statement stat = conn.createStatement();
             // create table
             stat.execute("CREATE TABLE TEST(NAME VARCHAR)");
