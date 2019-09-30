@@ -22,17 +22,16 @@ public class Consumer {
         properties.put("auto.commit.interval.ms", "1000");
         properties.put("auto.offset.reset", "earliest");
         properties.put("session.timeout.ms", "30000");
+        //properties.put("max.poll.records", 1);
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        KafkaConsumer kafkaConsumer = new KafkaConsumer(properties);
+        kafkaConsumer.subscribe(Arrays.asList("Test_Msg_Topic"));
 
-        org.apache.kafka.clients.consumer.KafkaConsumer kafkaConsumer = new org.apache.kafka.clients.consumer.KafkaConsumer(properties);
-        kafkaConsumer.subscribe(Arrays.asList("AlarmTopicTestZookeeper"));
         while (true) {
             ConsumerRecords<String, String> records = kafkaConsumer.poll(100);
             for (ConsumerRecord<String, String> record : records) {
-                System.out.println("-----------------");
                 System.out.printf("offset = %d, value = %s", record.offset(), record.value());
-                System.out.println();
             }
         }
     }
