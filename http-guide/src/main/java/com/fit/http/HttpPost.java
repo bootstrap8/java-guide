@@ -1,5 +1,6 @@
 package com.fit.http;
 
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -9,7 +10,9 @@ import java.io.IOException;
  * @version 1.0
  * @since 2019-09-30
  */
+@Slf4j
 public class HttpPost {
+
     public static void main(String[] args) {
         String url = "https://www.baidu.com/";
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -27,7 +30,8 @@ public class HttpPost {
         Call call = okHttpClient.newCall(request);
         try {
             Response response = call.execute();
-            System.out.println(response.body().string());
+            //System.out.println(response.body().string());
+            log.info("{}", response.body().string());
         } catch (IOException e) {
             e.printStackTrace();
         }
