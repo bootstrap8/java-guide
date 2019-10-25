@@ -18,13 +18,11 @@ public class Sender {
 
     private KafkaProducer<String, String> producer;
 
-    public final static String TOPIC = "Test_Msg_Topic";
-
     public Sender() {
         Properties props = new Properties();
+        //props.put("bootstrap.servers", "106.54.140.164:9092");
         props.put("bootstrap.servers", "192.168.56.4:9092");
         props.put("acks", "1");
-        //props.put("acks", "all");
         props.put("retries", 0);
         props.put("batch.size", 16384);
         props.put("linger.ms", 1);
@@ -37,19 +35,19 @@ public class Sender {
     /**
      *
      */
-    public void send(int cnt) {
-        for (int i = 0; i < cnt; i++) {
-            String key = "00|" + i;
-            String data = String.format("send msg %s to kfk", i + 300);
+    public void send(String topic, int cnt) {
+        for (int i = 1; i <= cnt; i++) {
+            String key = topic + "|" + i;
+            String data = key;
             try {
-                producer.send(new ProducerRecord<>(TOPIC, key, data), (RecordMetadata metadata, Exception e) -> {
+                producer.send(new ProducerRecord<>(topic, key, data), (RecordMetadata metadata, Exception e) -> {
                     if (e != null) {
                         log.error("", e);
                     } else {
-                        log.info("send ok");
+                        //log.info("send ok");
                     }
                 });
-                log.info("send to {} msg : {}", TOPIC, data);
+                log.info("send to {} msg : {}", topic, data);
             } catch (Exception e) {
                 log.error("send kfk msg error:", e);
             }
@@ -68,7 +66,8 @@ public class Sender {
 
     public static void main(String[] args) {
         Sender sender = new Sender();
-        sender.send(3);
+        sender.send("foo", 100);
+        sender.send("bar", 100);
         sender.destroy();
     }
 
