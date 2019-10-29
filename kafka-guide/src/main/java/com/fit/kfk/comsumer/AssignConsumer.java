@@ -1,5 +1,6 @@
 package com.fit.kfk.comsumer;
 
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -7,6 +8,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.TopicPartition;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -19,7 +21,8 @@ public class AssignConsumer {
 
     public static void main(String[] args) {
         Properties properties = new Properties();
-        properties.put("bootstrap.servers", "192.168.56.4:9092");
+        //properties.put("bootstrap.servers", "192.168.56.4:9092");
+        properties.put("bootstrap.servers", "106.54.140.164:9092");
         properties.put("group.id", "stone-group-1001");
         properties.put("enable.auto.commit", "true");
         properties.put("auto.commit.interval.ms", "1000");
@@ -44,16 +47,21 @@ public class AssignConsumer {
         boolean running = true;
         int count = 0;
 
+        Map<String, Integer> countMap = Maps.newHashMap();
         while (running) {
             ConsumerRecords<String, String> records = kafkaConsumer.poll(100);
             for (ConsumerRecord<String, String> record : records) {
                 String topic = record.topic();
-//                log.info("Topic : {} offset = {}, value = {}", topic, record.offset(), record.value());
-                System.out.println(record.value());
-                count++;
-                if (count > 10) {
-                    running = false;
+                if (countMap.get(topic) == null) {
+                    countMap.put(topic, 1);
+                } else {
+                    countMap.put(topic, countMap.get(topic) + 1);
                 }
+//                log.info("Topic : {} offset = {}, value = {}", topic, record.offset(), record.value());
+                if (countMap.get(topic) < 10) {
+                    System.out.println(record.offset() + "-" + record.value());
+                }
+                count++;
             }
         }
     }

@@ -20,8 +20,8 @@ public class Sender {
 
     public Sender() {
         Properties props = new Properties();
-        //props.put("bootstrap.servers", "106.54.140.164:9092");
-        props.put("bootstrap.servers", "192.168.56.4:9092");
+        props.put("bootstrap.servers", "106.54.140.164:9092");
+//        props.put("bootstrap.servers", "192.168.56.4:9092");
         props.put("acks", "1");
         props.put("retries", 0);
         props.put("batch.size", 16384);
