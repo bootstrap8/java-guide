@@ -29,6 +29,10 @@ public class Sender {
         props.put("buffer.memory", 33554432);
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+//        List<String> interceptors = new ArrayList<>();
+//        interceptors.add("huxi.test.producer.TimeStampPrependerInterceptor"); // interceptor 1
+//        interceptors.add("huxi.test.producer.CounterInterceptor"); // interceptor 2
+//        props.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, interceptors);
         producer = new KafkaProducer<>(props);
     }
 
