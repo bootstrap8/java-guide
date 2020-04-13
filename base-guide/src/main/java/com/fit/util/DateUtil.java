@@ -28,6 +28,14 @@ public class DateUtil {
         Date end = new Date(calendar.getTimeInMillis());
         System.out.println(format(end));
         System.out.println("days:" + daysBetween(begin, end));
+
+
+        System.out.println("-------------------------------");
+        System.out.println(timestamp());
+    }
+
+    public static String timestamp() {
+        return new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
     }
 
     public static int daysBetween(Date smdate, Date bdate) throws ParseException {
