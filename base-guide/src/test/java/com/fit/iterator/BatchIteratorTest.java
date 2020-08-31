@@ -1,11 +1,10 @@
 package com.fit.iterator;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -24,6 +23,19 @@ public class BatchIteratorTest {
         while (batchIter.hasNext()) {
             List<Integer> nums = batchIter.next();
             System.out.println(nums);
+        }
+
+        List<Map<String, Object>> parentList = Lists.newArrayList();
+        for (int i = 0; i <10 ; i++) {
+            Map<String,Object> map = Maps.newHashMap();
+            map.put(String.valueOf(i),String.valueOf(i));
+            parentList.add(map);
+        }
+
+        BatchIterator<Map<String, Object>> batchIterator = new BatchIterator(parentList, 2);
+        while (batchIterator.hasNext()) {
+            List<Map<String, Object>> itemList = batchIterator.next();
+            System.out.println(itemList);
         }
     }
 

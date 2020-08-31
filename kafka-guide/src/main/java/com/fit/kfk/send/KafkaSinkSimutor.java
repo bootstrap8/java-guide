@@ -23,7 +23,8 @@ public class KafkaSinkSimutor {
     public void readyGo() {
         //kafka 生产者
         Properties props = new Properties();
-        props.put("bootstrap.servers", "10.21.17.228:9092");
+        //props.put("bootstrap.servers", "10.21.17.228:9092");
+        props.put("bootstrap.servers", "10.198.16.49:9092");
         props.put("acks", "1");
         props.put("retries", "3");
         props.put("batch.size", "16384");
@@ -31,7 +32,8 @@ public class KafkaSinkSimutor {
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         producer = new KafkaProducer<>(props);
-        log.info("初始化Kafka生产者完成");
+        //log.info("初始化Kafka生产者完成");
+        System.out.println("初始化Kafka生产者完成");
     }
 
 
@@ -40,15 +42,18 @@ public class KafkaSinkSimutor {
         producer.send(new ProducerRecord<>(topic, json), (RecordMetadata metadata, Exception ex) -> {
             if (ex != null) {
                 log.error("send <1> msg to {} onComplete error:", topic, ex);
+                ex.printStackTrace();
             } else {
                 log.info("kafka sink {} ok, msg : {}", topic, json);
+                System.out.println("successfully send to kafka");
             }
         });
+        producer.flush();
     }
 
     public static void main(String[] args) throws InterruptedException {
         KafkaSinkSimutor sink = new KafkaSinkSimutor();
-        String topic = "AlarmStat-Alarm-Abims-AlarmStat-NeChange-Active";
+        String topic = "AlarmStat-Alarm";
         Map node = NodeUtil.createElement();
         Map subNode = NodeUtil.createElement();
         NodeUtil.addAttr(subNode, "alarmstatus", "0");
@@ -61,6 +66,7 @@ public class KafkaSinkSimutor {
         sink.readyGo();
         sink.sendMsg(topic, node);
         Thread.sleep(1000);
+        log.info("Send Over");
         System.out.println("send ok");
     }
 

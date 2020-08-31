@@ -1,5 +1,6 @@
 package com.fit.http;
 
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -11,42 +12,29 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0
  * @since 2020-03-12
  */
+@Slf4j
 public class HttpUtil {
+
+    private static String GET = "get";
+    private static String POST = "post";
+    private static int DEFAULT_TIMEOUT = 60;
+    private static final String MEDIA_TYPE_JSON = "application/json;charset=utf-8";
 
     private HttpUtil() {
     }
 
-    /**
-     * 发送get请求
-     *
-     * @param url    地址
-     * @param params 参数
-     * @return 请求结果
-     */
+
     public static String get(String url, Map<String, String> params) {
-        return request("get", url, params);
+        return doRequest(GET, url, params);
     }
 
-    /**
-     * 发送post请求
-     *
-     * @param url    地址
-     * @param params 参数
-     * @return 请求结果
-     */
+
     public static String post(String url, Map<String, String> params) {
-        return request("post", url, params);
+        return doRequest(POST, url, params);
     }
 
-    /**
-     * 发送http请求
-     *
-     * @param method 请求方法
-     * @param url    地址
-     * @param params 参数
-     * @return 请求结果
-     */
-    public static String request(String method, String url, Map<String, String> params) {
+
+    public static String doRequest(String method, String url, Map<String, String> params) {
 
         if (method == null) {
             throw new RuntimeException("请求方法不能为空");
@@ -64,32 +52,22 @@ public class HttpUtil {
             }
         }
 
-        Request request = new Request.Builder()
-                .url(httpBuilder.build())
-                .method(method, new FormBody.Builder().build())
-                .build();
+        Request request = new Request.Builder().url(httpBuilder.build()).method(method, new FormBody.Builder().build()).build();
 
         try {
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .readTimeout(20, TimeUnit.SECONDS)
-                    .build();
+            OkHttpClient client = new OkHttpClient.Builder().readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS).build();
             Response response = client.newCall(request).execute();
             return response.body().string();
         } catch (IOException e) {
+            log.error("", e);
             return null;
         }
     }
 
-    /**
-     * 发送post请求（json格式）
-     *
-     * @param url  url
-     * @param json json字符串
-     * @return 请求结果
-     */
-    public static String postJson(String url, String json) {
 
-        RequestBody body = RequestBody.create(MediaType.parse("application/json;charset=utf-8"), json);
+    public static String postByJson(String url, String json) {
+
+        RequestBody body = RequestBody.create(MediaType.parse(MEDIA_TYPE_JSON), json);
         Request request = new Request.Builder().url(url).post(body).build();
 
         try {
@@ -97,6 +75,7 @@ public class HttpUtil {
             Response response = client.newCall(request).execute();
             return response.body().string();
         } catch (IOException e) {
+            log.error("", e);
             return null;
         }
     }

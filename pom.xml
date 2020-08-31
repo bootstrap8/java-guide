@@ -19,6 +19,7 @@
         <module>kafka-guide</module>
         <module>zookeeper-guide</module>
         <module>http-guide</module>
+        <module>thrift-guide</module>
     </modules>
 
     <dependencies>
